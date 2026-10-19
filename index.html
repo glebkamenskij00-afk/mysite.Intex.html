@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Каменский Глеб — Веб-разработчик</title>
+<title>ЖелезоПром — Скупка компьютерного железа | Каменский Глеб</title>
 <style>
-  /* ===== Базовые стили ===== */
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --bg: #0a0a1a;
-    --bg-2: #13132b;
-    --accent: #7c5cff;
-    --accent-2: #ff5cae;
-    --text: #e8e8f0;
-    --muted: #9090a8;
-    --glass: rgba(255,255,255,0.06);
-    --border: rgba(255,255,255,0.12);
+    --bg: #0b0f1a;
+    --bg-2: #121829;
+    --accent: #00d9a3;
+    --accent-2: #00a8ff;
+    --warning: #ffb800;
+    --text: #e8ecf5;
+    --muted: #8a93a8;
+    --glass: rgba(255,255,255,0.05);
+    --border: rgba(255,255,255,0.1);
   }
   html, body { height: 100%; }
   body {
@@ -26,51 +26,72 @@
     line-height: 1.6;
   }
 
-  /* ===== Анимированный фон ===== */
-  .bg-blobs {
-    position: fixed; inset: 0; z-index: -1; overflow: hidden;
-  }
+  /* ===== Фон ===== */
+  .bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
   .blob {
-    position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5;
-    animation: float 18s ease-in-out infinite;
+    position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.4;
+    animation: float 20s ease-in-out infinite;
   }
-  .blob.b1 { width: 400px; height: 400px; background: var(--accent); top: -100px; left: -100px; }
-  .blob.b2 { width: 500px; height: 500px; background: var(--accent-2); bottom: -150px; right: -150px; animation-delay: -6s; }
-  .blob.b3 { width: 300px; height: 300px; background: #5caeff; top: 40%; left: 50%; animation-delay: -12s; }
+  .blob.b1 { width: 450px; height: 450px; background: var(--accent); top: -150px; left: -150px; }
+  .blob.b2 { width: 500px; height: 500px; background: var(--accent-2); bottom: -200px; right: -150px; animation-delay: -7s; }
+  .blob.b3 { width: 350px; height: 350px; background: #a855f7; top: 50%; left: 40%; animation-delay: -14s; }
   @keyframes float {
     0%,100% { transform: translate(0,0) scale(1); }
-    33% { transform: translate(60px,-40px) scale(1.1); }
-    66% { transform: translate(-40px,60px) scale(0.95); }
+    33% { transform: translate(80px,-50px) scale(1.15); }
+    66% { transform: translate(-60px,70px) scale(0.9); }
+  }
+
+  /* ===== Сетка-паттерн ===== */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: -1;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
   }
 
   /* ===== Навигация ===== */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 18px 40px; display: flex; justify-content: space-between; align-items: center;
-    background: rgba(10,10,26,0.6); backdrop-filter: blur(20px);
+    padding: 16px 40px; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(11,15,26,0.7); backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
   }
   .logo {
-    font-size: 22px; font-weight: 800;
+    font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 8px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,217,163,0.5); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px 5px rgba(0,217,163,0.3); }
+  }
+  .logo-text {
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .nav-links { display: flex; gap: 8px; list-style: none; }
+  .nav-links { display: flex; gap: 6px; list-style: none; }
   .nav-links button {
     background: transparent; border: none; color: var(--muted);
-    padding: 8px 16px; border-radius: 8px; cursor: pointer;
-    font-size: 15px; font-weight: 500; transition: all 0.3s;
+    padding: 9px 16px; border-radius: 10px; cursor: pointer;
+    font-size: 14px; font-weight: 500; transition: all 0.3s;
   }
   .nav-links button:hover { color: var(--text); background: var(--glass); }
   .nav-links button.active {
-    color: var(--text);
+    color: var(--bg);
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    font-weight: 600;
   }
   .burger { display: none; background: none; border: none; color: var(--text); font-size: 26px; cursor: pointer; }
 
   /* ===== Страницы ===== */
   .page {
-    min-height: 100vh; padding: 120px 40px 60px;
+    min-height: 100vh; padding: 120px 40px 80px;
     display: none; animation: fadeIn 0.6s ease;
   }
   .page.active { display: block; }
@@ -79,100 +100,157 @@
     to { opacity: 1; transform: translateY(0); }
   }
   .container { max-width: 1200px; margin: 0 auto; }
-  h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
-  h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 700; margin-bottom: 30px; }
+  h1 { font-size: clamp(34px, 5.5vw, 60px); font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+  h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 700; margin-bottom: 16px; }
   .gradient-text {
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .subtitle { font-size: 18px; color: var(--muted); margin-bottom: 30px; max-width: 600px; }
+  .subtitle { font-size: 17px; color: var(--muted); margin-bottom: 32px; max-width: 620px; }
 
   /* ===== Hero ===== */
-  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; min-height: 80vh; }
-  .hero-text .typed { display: inline-block; border-right: 3px solid var(--accent); padding-right: 4px; animation: blink 0.8s infinite; }
+  .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 50px; align-items: center; min-height: 80vh; }
+  .hero-text .typed {
+    display: inline-block; border-right: 3px solid var(--accent); padding-right: 4px;
+    animation: blink 0.8s infinite;
+  }
   @keyframes blink { 50% { border-color: transparent; } }
   .hero-img {
-    position: relative; width: 100%; aspect-ratio: 1; max-width: 420px; margin: 0 auto;
+    position: relative; width: 100%; aspect-ratio: 1; max-width: 440px; margin: 0 auto;
     border-radius: 30px; overflow: hidden;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    padding: 3px; animation: morph 8s ease-in-out infinite;
+    padding: 3px; animation: morph 10s ease-in-out infinite;
   }
   .hero-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 28px; display: block; }
   @keyframes morph {
     0%,100% { border-radius: 30px 70px 50px 80px; }
     50% { border-radius: 70px 30px 80px 50px; }
   }
-  .btn {
-    display: inline-block; padding: 14px 32px; border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: white; text-decoration: none; font-weight: 600; border: none; cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s; font-size: 16px;
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(0,217,163,0.15); border: 1px solid rgba(0,217,163,0.3);
+    color: var(--accent); font-size: 14px; font-weight: 600; margin-bottom: 18px;
   }
-  .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(124,92,255,0.4); }
-  .btn-outline {
-    background: transparent; border: 1px solid var(--border);
-    margin-left: 12px;
+  .badge::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
   }
 
+  /* ===== Кнопки ===== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--bg); text-decoration: none; font-weight: 700; border: none; cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s; font-size: 15px;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,217,163,0.4); }
+  .btn-outline {
+    background: transparent; border: 1px solid var(--border); color: var(--text);
+    margin-left: 10px;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); box-shadow: none; }
+
   /* ===== Карточки ===== */
-  .grid { display: grid; gap: 24px; }
+  .grid { display: grid; gap: 22px; }
   .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
   .grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
   .card {
     background: var(--glass); border: 1px solid var(--border);
-    border-radius: 20px; padding: 28px; backdrop-filter: blur(10px);
-    transition: transform 0.4s, border-color 0.4s;
+    border-radius: 20px; padding: 26px; backdrop-filter: blur(10px);
+    transition: transform 0.4s, border-color 0.4s, background 0.4s;
+    position: relative; overflow: hidden;
   }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0,217,163,0.08), transparent);
+    transition: left 0.6s;
+  }
+  .card:hover::before { left: 100%; }
   .card:hover { transform: translateY(-8px); border-color: var(--accent); }
   .card .icon {
     width: 56px; height: 56px; border-radius: 14px;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     display: flex; align-items: center; justify-content: center;
-    font-size: 28px; margin-bottom: 18px;
+    font-size: 28px; margin-bottom: 16px;
   }
-  .card h3 { font-size: 20px; margin-bottom: 10px; }
-  .card p { color: var(--muted); font-size: 15px; }
+  .card h3 { font-size: 19px; margin-bottom: 10px; }
+  .card p { color: var(--muted); font-size: 14.5px; }
+  .card img {
+    width: 100%; height: 160px; object-fit: cover;
+    border-radius: 12px; margin-bottom: 14px;
+  }
 
-  /* ===== Навыки ===== */
-  .skills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-  .skill {
-    padding: 8px 16px; border-radius: 20px;
+  /* ===== About ===== */
+  .about-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: center; }
+  .about-img {
+    border-radius: 24px; overflow: hidden; position: relative;
+    border: 1px solid var(--border);
+  }
+  .about-img img { width: 100%; display: block; }
+  .about-img::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,217,163,0.15), transparent);
+  }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .stat {
+    padding: 18px; background: var(--glass); border: 1px solid var(--border);
+    border-radius: 14px; text-align: center;
+  }
+  .stat-num {
+    font-size: 28px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* ===== Цены ===== */
+  .price-card {
     background: var(--glass); border: 1px solid var(--border);
-    font-size: 14px; transition: all 0.3s;
+    border-radius: 20px; padding: 26px; transition: all 0.4s;
+    position: relative;
   }
-  .skill:hover { background: var(--accent); border-color: var(--accent); }
-
-  /* ===== Портфолио ===== */
-  .portfolio-item {
-    position: relative; border-radius: 20px; overflow: hidden;
-    aspect-ratio: 4/3; cursor: pointer;
+  .price-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(0,217,163,0.08), rgba(0,168,255,0.08));
   }
-  .portfolio-item img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.6s;
+  .price-card.featured::before {
+    content: 'ТОП'; position: absolute; top: 16px; right: 16px;
+    padding: 4px 12px; background: var(--accent); color: var(--bg);
+    border-radius: 20px; font-size: 11px; font-weight: 800;
   }
-  .portfolio-item:hover img { transform: scale(1.1); }
-  .portfolio-overlay {
-    position: absolute; inset: 0; padding: 24px;
-    background: linear-gradient(to top, rgba(10,10,26,0.95), transparent 60%);
-    display: flex; flex-direction: column; justify-content: flex-end;
-    opacity: 0; transition: opacity 0.4s;
+  .price-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+  .price-card h3 { font-size: 20px; margin-bottom: 8px; }
+  .price-card .cat { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+  .price-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px dashed var(--border);
+    font-size: 14px;
   }
-  .portfolio-item:hover .portfolio-overlay { opacity: 1; }
-  .portfolio-overlay h3 { font-size: 22px; margin-bottom: 6px; }
-  .portfolio-overlay span { color: var(--accent); font-size: 14px; }
+  .price-row:last-child { border-bottom: none; }
+  .price-row .price {
+    font-weight: 700; color: var(--accent);
+  }
 
   /* ===== Контакты ===== */
   .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
   .contact-info .info-item {
-    display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 16px; margin-bottom: 14px;
     padding: 16px; background: var(--glass); border-radius: 14px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border); transition: all 0.3s;
   }
+  .info-item:hover { border-color: var(--accent); transform: translateX(6px); }
   .info-item .ic {
     width: 44px; height: 44px; border-radius: 10px;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     display: flex; align-items: center; justify-content: center; font-size: 20px;
+    flex-shrink: 0;
   }
   form { display: flex; flex-direction: column; gap: 14px; }
   input, textarea {
@@ -192,24 +270,46 @@
   }
   .socials a:hover { background: var(--accent); transform: translateY(-3px); }
 
+  /* ===== Навигационные кнопки внизу ===== */
+  .page-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--border);
+  }
+  .page-nav button {
+    background: var(--glass); border: 1px solid var(--border); color: var(--text);
+    padding: 12px 22px; border-radius: 12px; cursor: pointer;
+    font-size: 14px; font-weight: 500; transition: all 0.3s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .page-nav button:hover { border-color: var(--accent); color: var(--accent); transform: translateX(4px); }
+  .page-nav button.prev:hover { transform: translateX(-4px); }
+  .page-nav .spacer { flex: 1; }
+
   /* ===== Анимация появления ===== */
   .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align: center; padding: 30px; color: var(--muted); font-size: 13px;
+    border-top: 1px solid var(--border); margin-top: 40px;
+  }
 
   /* ===== Адаптив ===== */
   @media (max-width: 768px) {
     nav { padding: 14px 20px; }
     .nav-links {
-      position: fixed; top: 64px; right: -100%; width: 70%; height: 100vh;
+      position: fixed; top: 64px; right: -100%; width: 75%; height: 100vh;
       background: var(--bg-2); flex-direction: column; padding: 30px;
       transition: right 0.4s; border-left: 1px solid var(--border);
     }
     .nav-links.open { right: 0; }
     .burger { display: block; }
     .page { padding: 100px 20px 40px; }
-    .hero { grid-template-columns: 1fr; text-align: center; }
+    .hero, .about-grid, .contact-wrap { grid-template-columns: 1fr; text-align: center; }
     .hero-img { max-width: 280px; }
-    .contact-wrap { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr; }
+    .page-nav { flex-direction: column; gap: 12px; }
   }
 </style>
 </head>
@@ -222,12 +322,15 @@
 </div>
 
 <nav>
-  <div class="logo">AM.</div>
+  <div class="logo">
+    <div class="logo-icon">⚙️</div>
+    <span class="logo-text">ЖелезоПром</span>
+  </div>
   <ul class="nav-links" id="navLinks">
     <li><button data-page="home" class="active">Главная</button></li>
     <li><button data-page="about">Обо мне</button></li>
-    <li><button data-page="services">Услуги</button></li>
-    <li><button data-page="portfolio">Портфолио</button></li>
+    <li><button data-page="catalog">Что скупаем</button></li>
+    <li><button data-page="prices">Цены</button></li>
     <li><button data-page="contact">Контакты</button></li>
   </ul>
   <button class="burger" id="burger">☰</button>
@@ -237,16 +340,16 @@
 <section class="page active" id="home">
   <div class="container hero">
     <div class="hero-text">
-      <p style="color:var(--accent); font-weight:600; margin-bottom:12px;">👋 Привет, я</p>
-      <h1>Алекс Морозов<br><span class="gradient-text typed" id="typed"></span></h1>
-      <p class="subtitle">Создаю современные веб-решения, которые помогают бизнесу расти. Более 5 лет опыта в разработке.</p>
+      <div class="badge">Работаю ежедневно с 10:00 до 20:00</div>
+      <h1>Скупка <span class="gradient-text">компьютерного</span><br>железа <span class="typed" id="typed"></span></h1>
+      <p class="subtitle">Продай свой б/у ПК, видеокарту, процессор или ноутбук по честной цене. Быстрая оценка, моментальная оплата наличными или на карту. Студент, который понимает в железе!</p>
       <div>
-        <button class="btn" onclick="goTo('portfolio')">Мои работы</button>
-        <button class="btn btn-outline" onclick="goTo('contact')">Связаться</button>
+        <button class="btn" onclick="goTo('prices')">💰 Узнать цены</button>
+        <button class="btn btn-outline" onclick="goTo('contact')">📞 Связаться</button>
       </div>
     </div>
     <div class="hero-img">
-      <img src="https://picsum.photos/seed/alex/500/500" alt="Алекс">
+      <img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?w=600" alt="Железо">
     </div>
   </div>
 </section>
@@ -255,103 +358,162 @@
 <section class="page" id="about">
   <div class="container">
     <h2 class="reveal">Обо <span class="gradient-text">мне</span></h2>
-    <div class="grid grid-2">
-      <div class="card reveal">
-        <img src="https://picsum.photos/seed/about/600/400" alt="about" style="width:100%; border-radius:14px; margin-bottom:18px;">
-        <h3>Моя история</h3>
-        <p>Я начал программировать в 16 лет, и с тех пор веб-разработка стала моей страстью. За годы работы я реализовал более 80 проектов — от небольших лендингов до сложных SaaS-платформ.</p>
+    <p class="subtitle reveal">Студент, который превратил хобби в дело жизни</p>
+    <div class="about-grid">
+      <div class="about-img reveal">
+        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600" alt="Глеб">
       </div>
-      <div class="card reveal">
-        <h3>Мои навыки</h3>
-        <p>Постоянно учусь новому и слежу за трендами индустрии. Вот мой основной стек:</p>
-        <div class="skills">
-          <span class="skill">HTML5</span>
-          <span class="skill">CSS3 / SCSS</span>
-          <span class="skill">JavaScript</span>
-          <span class="skill">TypeScript</span>
-          <span class="skill">React</span>
-          <span class="skill">Vue.js</span>
-          <span class="skill">Node.js</span>
-          <span class="skill">Python</span>
-          <span class="skill">PostgreSQL</span>
-          <span class="skill">Docker</span>
-          <span class="skill">Figma</span>
+      <div class="reveal">
+        <h3>Привет! Я <span class="gradient-text">Каменский Глеб</span></h3>
+        <p style="color:var(--muted); margin-bottom:16px;">
+          Учусь на 3 курсе технического направления, а скупкой компьютерного железа занимаюсь уже более 2 лет. За это время помог сотням людей выгодно продать ненужную технику.
+        </p>
+        <p style="color:var(--muted); margin-bottom:16px;">
+          Отлично разбираюсь в комплектующих, знаю реальную рыночную стоимость и никогда не занижаю цены. Работаю честно, быстро и без обмана.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-num">500+</div>
+            <div class="stat-label">Довольных клиентов</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">2 года</div>
+            <div class="stat-label">Опыта работы</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">24ч</div>
+            <div class="stat-label">Средняя сделка</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- 3. УСЛУГИ -->
-<section class="page" id="services">
-  <div class="container">
-    <h2 class="reveal">Мои <span class="gradient-text">услуги</span></h2>
-    <p class="subtitle reveal">Комплексный подход к вашим задачам — от идеи до запуска и поддержки.</p>
-    <div class="grid grid-3">
-      <div class="card reveal">
-        <div class="icon">🎨</div>
-        <h3>Веб-дизайн</h3>
-        <p>Создаю уникальные и удобные интерфейсы, которые отражают дух вашего бренда и привлекают клиентов.</p>
-      </div>
-      <div class="card reveal">
-        <div class="icon">💻</div>
-        <h3>Разработка сайтов</h3>
-        <p>Верстаю быстрые, адаптивные и SEO-оптимизированные сайты с чистым кодом и современными технологиями.</p>
-      </div>
-      <div class="card reveal">
-        <div class="icon">📱</div>
-        <h3>Мобильные приложения</h3>
-        <p>Кроссплатформенные приложения на React Native, которые работают одинаково хорошо на iOS и Android.</p>
-      </div>
-      <div class="card reveal">
-        <div class="icon">⚡</div>
-        <h3>Оптимизация</h3>
-        <p>Ускоряю загрузку сайтов, улучшаю Core Web Vitals и повышаю позиции в поисковой выдаче.</p>
-      </div>
-      <div class="card reveal">
-        <div class="icon">🛒</div>
-        <h3>Интернет-магазины</h3>
-        <p>Разрабатываю e-commerce решения с удобной админкой, оплатой и интеграцией со службами доставки.</p>
-      </div>
-      <div class="card reveal">
-        <div class="icon">🔧</div>
-        <h3>Поддержка</h3>
-        <p>Техническое сопровождение проектов: обновления, бэкапы, мониторинг и оперативное решение проблем.</p>
-      </div>
+    <div class="page-nav">
+      <button class="prev" onclick="goTo('home')">← Главная</button>
+      <div class="spacer"></div>
+      <button onclick="goTo('catalog')">Что скупаем →</button>
     </div>
   </div>
 </section>
 
-<!-- 4. ПОРТФОЛИО -->
-<section class="page" id="portfolio">
+<!-- 3. ЧТО СКУПАЕМ -->
+<section class="page" id="catalog">
   <div class="container">
-    <h2 class="reveal">Мои <span class="gradient-text">работы</span></h2>
-    <p class="subtitle reveal">Избранные проекты, которыми я горжусь.</p>
+    <h2 class="reveal">Что <span class="gradient-text">скупаем</span></h2>
+    <p class="subtitle reveal">Принимаем любое компьютерное железо в рабочем состоянии</p>
     <div class="grid grid-3">
-      <div class="portfolio-item reveal">
-        <img src="https://picsum.photos/seed/proj1/600/450" alt="Project 1">
-        <div class="portfolio-overlay"><h3>FinTech Dashboard</h3><span>React · TypeScript</span></div>
+      <div class="card reveal">
+        <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500" alt="Видеокарты">
+        <div class="icon">🎮</div>
+        <h3>Видеокарты</h3>
+        <p>NVIDIA RTX, GTX, AMD Radeon любых поколений. Даже старые модели в рабочем состоянии.</p>
       </div>
-      <div class="portfolio-item reveal">
-        <img src="https://picsum.photos/seed/proj2/600/450" alt="Project 2">
-        <div class="portfolio-overlay"><h3>E-commerce Platform</h3><span>Vue.js · Node.js</span></div>
+      <div class="card reveal">
+        <img src="https://images.unsplash.com/photo-1555617981-dac3880eac6e?w=500" alt="Процессоры">
+        <div class="icon">💾</div>
+        <h3>Процессоры</h3>
+        <p>Intel Core i3/i5/i7/i9, AMD Ryzen 3/5/7/9. Все поколения, включая свежие.</p>
       </div>
-      <div class="portfolio-item reveal">
-        <img src="https://picsum.photos/seed/proj3/600/450" alt="Project 3">
-        <div class="portfolio-overlay"><h3>Travel App</h3><span>React Native</span></div>
+      <div class="card reveal">
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=500" alt="Материнские платы">
+        <div class="icon">🔌</div>
+        <h3>Материнские платы</h3>
+        <p>ASUS, MSI, Gigabyte, ASRock. LGA 1151, 1200, 1700, AM4, AM5 и другие сокеты.</p>
       </div>
-      <div class="portfolio-item reveal">
-        <img src="https://picsum.photos/seed/proj4/600/450" alt="Project 4">
-        <div class="portfolio-overlay"><h3>Corporate Website</h3><span>Next.js · CMS</span></div>
+      <div class="card reveal">
+        <img src="https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=500" alt="Ноутбуки">
+        <div class="icon">💻</div>
+        <h3>Ноутбуки</h3>
+        <p>Игровые и офисные модели. ASUS, Lenovo, HP, Acer, Dell, Apple MacBook.</p>
       </div>
-      <div class="portfolio-item reveal">
-        <img src="https://picsum.photos/seed/proj5/600/450" alt="Project 5">
-        <div class="portfolio-overlay"><h3>Food Delivery</h3><span>Flutter · Firebase</span></div>
+      <div class="card reveal">
+        <img src="https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=500" alt="Оперативная память">
+        <div class="icon">🧠</div>
+        <h3>Оперативная память</h3>
+        <p>DDR3, DDR4, DDR5 любого объёма. Kingstone, Corsair, G.Skill, Crucial.</p>
       </div>
-      <div class="portfolio-item reveal">
-        <img src="https://picsum.photos/seed/proj6/600/450" alt="Project 6">
-        <div class="portfolio-overlay"><h3>AI Chat Bot</h3><span>Python · OpenAI</span></div>
+      <div class="card reveal">
+        <img src="https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=500" alt="SSD/HDD">
+        <div class="icon">💿</div>
+        <h3>SSD и HDD</h3>
+        <p>Накопители SATA, NVMe M.2, внешние диски. От 120 ГБ до 8 ТБ.</p>
       </div>
+      <div class="card reveal">
+        <img src="https://images.unsplash.com/photo-1587202372616-b43abea06c2a?w=500" alt="Блоки питания">
+        <div class="icon">⚡</div>
+        <h3>Блоки питания</h3>
+        <p>Сертифицированные БП от 400W. Gold, Platinum. Corsair, Seasonic, be quiet!</p>
+      </div>
+      <div class="card reveal">
+        <img src="https://images.unsplash.com/photo-1587202372634-327a5e5b4cb8?w=500" alt="Корпуса">
+        <div class="icon">📦</div>
+        <h3>Корпуса и охлаждение</h3>
+        <p>Корпуса, кулеры, водяное охлаждение. В хорошем состоянии, без сильных повреждений.</p>
+      </div>
+      <div class="card reveal">
+        <img src="https://images.unsplash.com/photo-1625842268584-8f3296256771?w=500" alt="Мониторы">
+        <div class="icon">🖥️</div>
+        <h3>Мониторы</h3>
+        <p>От 21 до 34 дюймов. IPS, VA, TN. Развёртка от 60 до 240 Гц.</p>
+      </div>
+    </div>
+
+    <div class="page-nav">
+      <button class="prev" onclick="goTo('about')">← Обо мне</button>
+      <div class="spacer"></div>
+      <button onclick="goTo('prices')">Цены →</button>
+    </div>
+  </div>
+</section>
+
+<!-- 4. ЦЕНЫ -->
+<section class="page" id="prices">
+  <div class="container">
+    <h2 class="reveal">Актуальные <span class="gradient-text">цены</span></h2>
+    <p class="subtitle reveal">Ориентировочные цены. Точную оценку дам после осмотра — бесплатно!</p>
+    <div class="grid grid-3">
+      <div class="price-card reveal">
+        <h3>🎮 Видеокарты</h3>
+        <div class="cat">Популярные модели</div>
+        <div class="price-row"><span>RTX 3060 / 3060 Ti</span><span class="price">от 18 000 ₽</span></div>
+        <div class="price-row"><span>RTX 3070 / 3070 Ti</span><span class="price">от 28 000 ₽</span></div>
+        <div class="price-row"><span>RTX 4060 / 4060 Ti</span><span class="price">от 25 000 ₽</span></div>
+        <div class="price-row"><span>RTX 4070 / 4070 Ti</span><span class="price">от 42 000 ₽</span></div>
+        <div class="price-row"><span>GTX 1660 / 1660 Super</span><span class="price">от 9 000 ₽</span></div>
+        <div class="price-row"><span>RX 6600 / 6600 XT</span><span class="price">от 15 000 ₽</span></div>
+      </div>
+      <div class="price-card featured reveal">
+        <h3>💾 Процессоры</h3>
+        <div class="cat">Intel & AMD</div>
+        <div class="price-row"><span>Intel i5-12400F</span><span class="price">от 9 500 ₽</span></div>
+        <div class="price-row"><span>Intel i5-13400F</span><span class="price">от 13 000 ₽</span></div>
+        <div class="price-row"><span>Intel i7-12700K</span><span class="price">от 22 000 ₽</span></div>
+        <div class="price-row"><span>Ryzen 5 5600</span><span class="price">от 9 000 ₽</span></div>
+        <div class="price-row"><span>Ryzen 7 5800X</span><span class="price">от 16 000 ₽</span></div>
+        <div class="price-row"><span>Ryzen 7 7700X</span><span class="price">от 24 000 ₽</span></div>
+      </div>
+      <div class="price-card reveal">
+        <h3>💻 Ноутбуки</h3>
+        <div class="cat">Игровые и офисные</div>
+        <div class="price-row"><span>Офисный (базовый)</span><span class="price">от 8 000 ₽</span></div>
+        <div class="price-row"><span>Средний класс</span><span class="price">от 20 000 ₽</span></div>
+        <div class="price-row"><span>Игровой (RTX 3050)</span><span class="price">от 35 000 ₽</span></div>
+        <div class="price-row"><span>Игровой (RTX 4060)</span><span class="price">от 55 000 ₽</span></div>
+        <div class="price-row"><span>MacBook Air M1/M2</span><span class="price">от 45 000 ₽</span></div>
+        <div class="price-row"><span>MacBook Pro M3</span><span class="price">от 90 000 ₽</span></div>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:30px; text-align:center; padding:30px;">
+      <h3 style="margin-bottom:10px;">🎯 Не нашли свою модель?</h3>
+      <p style="margin-bottom:20px;">Пришлите фото и характеристики — рассчитаю точную цену за 15 минут!</p>
+      <button class="btn" onclick="goTo('contact')">📩 Оценить моё железо</button>
+    </div>
+
+    <div class="page-nav">
+      <button class="prev" onclick="goTo('catalog')">← Что скупаем</button>
+      <div class="spacer"></div>
+      <button onclick="goTo('contact')">Контакты →</button>
     </div>
   </div>
 </section>
@@ -360,80 +522,99 @@
 <section class="page" id="contact">
   <div class="container">
     <h2 class="reveal">Связаться <span class="gradient-text">со мной</span></h2>
-    <p class="subtitle reveal">Готов обсудить ваш проект. Напишите — отвечу в течение дня.</p>
+    <p class="subtitle reveal">Напишите или позвоните — отвечу в течение 15 минут в рабочее время</p>
     <div class="contact-wrap">
       <div class="contact-info reveal">
         <div class="info-item">
-          <div class="ic">📧</div>
-          <div><div style="color:var(--muted); font-size:13px;">Email</div><div>alex@morozov.dev</div></div>
+          <div class="ic">📞</div>
+          <div><div style="color:var(--muted); font-size:13px;">Телефон / WhatsApp</div><div>+7 (999) 123-45-67</div></div>
         </div>
         <div class="info-item">
-          <div class="ic">📞</div>
-          <div><div style="color:var(--muted); font-size:13px;">Телефон</div><div>+7 (999) 123-45-67</div></div>
+          <div class="ic">✈️</div>
+          <div><div style="color:var(--muted); font-size:13px;">Telegram</div><div>@kaminsky_gleb</div></div>
+        </div>
+        <div class="info-item">
+          <div class="ic">📧</div>
+          <div><div style="color:var(--muted); font-size:13px;">Email</div><div>gleb.kaminsky@mail.ru</div></div>
         </div>
         <div class="info-item">
           <div class="ic">📍</div>
-          <div><div style="color:var(--muted); font-size:13px;">Локация</div><div>Москва, Россия</div></div>
+          <div><div style="color:var(--muted); font-size:13px;">Город</div><div>Москва (выезд в пределах МКАД)</div></div>
+        </div>
+        <div class="info-item">
+          <div class="ic">🕐</div>
+          <div><div style="color:var(--muted); font-size:13px;">График</div><div>Ежедневно 10:00 — 20:00</div></div>
         </div>
         <div class="socials">
           <a href="#" title="Telegram">✈️</a>
-          <a href="#" title="GitHub">🐙</a>
-          <a href="#" title="LinkedIn">💼</a>
+          <a href="#" title="WhatsApp">💬</a>
+          <a href="#" title="VK">🔵</a>
           <a href="#" title="Instagram">📷</a>
         </div>
       </div>
       <form class="reveal" onsubmit="submitForm(event)">
         <input type="text" placeholder="Ваше имя" required>
-        <input type="email" placeholder="Email" required>
-        <input type="text" placeholder="Тема">
-        <textarea placeholder="Сообщение..." required></textarea>
-        <button type="submit" class="btn">Отправить сообщение</button>
+        <input type="tel" placeholder="Телефон" required>
+        <input type="text" placeholder="Что хотите продать?">
+        <textarea placeholder="Опишите железо: модель, состояние, комплектация..." required></textarea>
+        <button type="submit" class="btn">💸 Отправить заявку</button>
       </form>
+    </div>
+
+    <div class="page-nav">
+      <button class="prev" onclick="goTo('prices')">← Цены</button>
+      <div class="spacer"></div>
+      <button onclick="goTo('home')">🏠 На главную</button>
     </div>
   </div>
 </section>
 
+<footer>
+  © 2026 ЖелезоПром · Каменский Глеб · Все права защищены
+</footer>
+
 <script>
-  // ===== Навигация между страницами =====
+  // ===== Навигация =====
   const buttons = document.querySelectorAll('.nav-links button');
   const pages = document.querySelectorAll('.page');
+  const pageOrder = ['home', 'about', 'catalog', 'prices', 'contact'];
 
   function goTo(id) {
     pages.forEach(p => p.classList.remove('active'));
     buttons.forEach(b => b.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    document.querySelector(`[data-page="${id}"]`).classList.add('active');
+    const navBtn = document.querySelector(`[data-page="${id}"]`);
+    if (navBtn) navBtn.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     document.getElementById('navLinks').classList.remove('open');
-    // Перезапуск анимаций появления
     setTimeout(triggerReveals, 100);
   }
 
   buttons.forEach(btn => btn.addEventListener('click', () => goTo(btn.dataset.page)));
 
-  // ===== Бургер-меню =====
+  // ===== Бургер =====
   document.getElementById('burger').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('open');
   });
 
   // ===== Typing-эффект =====
-  const phrases = ['Веб-разработчик', 'UI/UX Дизайнер', 'Фрилансер', 'Создатель идей'];
+  const phrases = ['по лучшим ценам', 'быстро и честно', 'налично или на карту', 'в Москве'];
   let pIdx = 0, cIdx = 0, deleting = false;
   const typedEl = document.getElementById('typed');
   function type() {
     const current = phrases[pIdx];
     typedEl.textContent = current.substring(0, cIdx);
-    if (!deleting && cIdx < current.length) { cIdx++; setTimeout(type, 100); }
-    else if (deleting && cIdx > 0) { cIdx--; setTimeout(type, 50); }
+    if (!deleting && cIdx < current.length) { cIdx++; setTimeout(type, 90); }
+    else if (deleting && cIdx > 0) { cIdx--; setTimeout(type, 40); }
     else {
       deleting = !deleting;
       if (!deleting) pIdx = (pIdx + 1) % phrases.length;
-      setTimeout(type, 1200);
+      setTimeout(type, 1400);
     }
   }
   type();
 
-  // ===== Анимация появления при скролле =====
+  // ===== Анимация появления =====
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
@@ -450,14 +631,23 @@
   function submitForm(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button');
-    btn.textContent = '✓ Отправлено!';
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '✓ Заявка отправлена!';
     btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
     e.target.reset();
     setTimeout(() => {
-      btn.textContent = 'Отправить сообщение';
+      btn.innerHTML = originalText;
       btn.style.background = '';
     }, 3000);
   }
+
+  // ===== Клавиатурная навигация =====
+  document.addEventListener('keydown', (e) => {
+    const current = pageOrder.find(id => document.getElementById(id).classList.contains('active'));
+    const idx = pageOrder.indexOf(current);
+    if (e.key === 'ArrowRight' && idx < pageOrder.length - 1) goTo(pageOrder[idx + 1]);
+    if (e.key === 'ArrowLeft' && idx > 0) goTo(pageOrder[idx - 1]);
+  });
 </script>
 </body>
 </html>
