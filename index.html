@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Алекс Морозов — Веб-разработчик</title>
+<style>
+  /* ===== Базовые стили ===== */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0a1a;
+    --bg-2: #13132b;
+    --accent: #7c5cff;
+    --accent-2: #ff5cae;
+    --text: #e8e8f0;
+    --muted: #9090a8;
+    --glass: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.12);
+  }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ===== Анимированный фон ===== */
+  .bg-blobs {
+    position: fixed; inset: 0; z-index: -1; overflow: hidden;
+  }
+  .blob {
+    position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5;
+    animation: float 18s ease-in-out infinite;
+  }
+  .blob.b1 { width: 400px; height: 400px; background: var(--accent); top: -100px; left: -100px; }
+  .blob.b2 { width: 500px; height: 500px; background: var(--accent-2); bottom: -150px; right: -150px; animation-delay: -6s; }
+  .blob.b3 { width: 300px; height: 300px; background: #5caeff; top: 40%; left: 50%; animation-delay: -12s; }
+  @keyframes float {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(60px,-40px) scale(1.1); }
+    66% { transform: translate(-40px,60px) scale(0.95); }
+  }
+
+  /* ===== Навигация ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 40px; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(10,10,26,0.6); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-size: 22px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .nav-links { display: flex; gap: 8px; list-style: none; }
+  .nav-links button {
+    background: transparent; border: none; color: var(--muted);
+    padding: 8px 16px; border-radius: 8px; cursor: pointer;
+    font-size: 15px; font-weight: 500; transition: all 0.3s;
+  }
+  .nav-links button:hover { color: var(--text); background: var(--glass); }
+  .nav-links button.active {
+    color: var(--text);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+  .burger { display: none; background: none; border: none; color: var(--text); font-size: 26px; cursor: pointer; }
+
+  /* ===== Страницы ===== */
+  .page {
+    min-height: 100vh; padding: 120px 40px 60px;
+    display: none; animation: fadeIn 0.6s ease;
+  }
+  .page.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+  h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 700; margin-bottom: 30px; }
+  .gradient-text {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .subtitle { font-size: 18px; color: var(--muted); margin-bottom: 30px; max-width: 600px; }
+
+  /* ===== Hero ===== */
+  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; min-height: 80vh; }
+  .hero-text .typed { display: inline-block; border-right: 3px solid var(--accent); padding-right: 4px; animation: blink 0.8s infinite; }
+  @keyframes blink { 50% { border-color: transparent; } }
+  .hero-img {
+    position: relative; width: 100%; aspect-ratio: 1; max-width: 420px; margin: 0 auto;
+    border-radius: 30px; overflow: hidden;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    padding: 3px; animation: morph 8s ease-in-out infinite;
+  }
+  .hero-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 28px; display: block; }
+  @keyframes morph {
+    0%,100% { border-radius: 30px 70px 50px 80px; }
+    50% { border-radius: 70px 30px 80px 50px; }
+  }
+  .btn {
+    display: inline-block; padding: 14px 32px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white; text-decoration: none; font-weight: 600; border: none; cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s; font-size: 16px;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(124,92,255,0.4); }
+  .btn-outline {
+    background: transparent; border: 1px solid var(--border);
+    margin-left: 12px;
+  }
+
+  /* ===== Карточки ===== */
+  .grid { display: grid; gap: 24px; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .card {
+    background: var(--glass); border: 1px solid var(--border);
+    border-radius: 20px; padding: 28px; backdrop-filter: blur(10px);
+    transition: transform 0.4s, border-color 0.4s;
+  }
+  .card:hover { transform: translateY(-8px); border-color: var(--accent); }
+  .card .icon {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; margin-bottom: 18px;
+  }
+  .card h3 { font-size: 20px; margin-bottom: 10px; }
+  .card p { color: var(--muted); font-size: 15px; }
+
+  /* ===== Навыки ===== */
+  .skills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .skill {
+    padding: 8px 16px; border-radius: 20px;
+    background: var(--glass); border: 1px solid var(--border);
+    font-size: 14px; transition: all 0.3s;
+  }
+  .skill:hover { background: var(--accent); border-color: var(--accent); }
+
+  /* ===== Портфолио ===== */
+  .portfolio-item {
+    position: relative; border-radius: 20px; overflow: hidden;
+    aspect-ratio: 4/3; cursor: pointer;
+  }
+  .portfolio-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s;
+  }
+  .portfolio-item:hover img { transform: scale(1.1); }
+  .portfolio-overlay {
+    position: absolute; inset: 0; padding: 24px;
+    background: linear-gradient(to top, rgba(10,10,26,0.95), transparent 60%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+  .portfolio-overlay h3 { font-size: 22px; margin-bottom: 6px; }
+  .portfolio-overlay span { color: var(--accent); font-size: 14px; }
+
+  /* ===== Контакты ===== */
+  .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .contact-info .info-item {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+    padding: 16px; background: var(--glass); border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+  .info-item .ic {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  form { display: flex; flex-direction: column; gap: 14px; }
+  input, textarea {
+    padding: 14px 18px; background: var(--glass); border: 1px solid var(--border);
+    border-radius: 12px; color: var(--text); font-size: 15px; font-family: inherit;
+    transition: border-color 0.3s;
+  }
+  input:focus, textarea:focus { outline: none; border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 120px; }
+
+  .socials { display: flex; gap: 12px; margin-top: 20px; }
+  .socials a {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--glass); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 20px; transition: all 0.3s;
+  }
+  .socials a:hover { background: var(--accent); transform: translateY(-3px); }
+
+  /* ===== Анимация появления ===== */
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ===== Адаптив ===== */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links {
+      position: fixed; top: 64px; right: -100%; width: 70%; height: 100vh;
+      background: var(--bg-2); flex-direction: column; padding: 30px;
+      transition: right 0.4s; border-left: 1px solid var(--border);
+    }
+    .nav-links.open { right: 0; }
+    .burger { display: block; }
+    .page { padding: 100px 20px 40px; }
+    .hero { grid-template-columns: 1fr; text-align: center; }
+    .hero-img { max-width: 280px; }
+    .contact-wrap { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<nav>
+  <div class="logo">AM.</div>
+  <ul class="nav-links" id="navLinks">
+    <li><button data-page="home" class="active">Главная</button></li>
+    <li><button data-page="about">Обо мне</button></li>
+    <li><button data-page="services">Услуги</button></li>
+    <li><button data-page="portfolio">Портфолио</button></li>
+    <li><button data-page="contact">Контакты</button></li>
+  </ul>
+  <button class="burger" id="burger">☰</button>
+</nav>
+
+<!-- 1. ГЛАВНАЯ -->
+<section class="page active" id="home">
+  <div class="container hero">
+    <div class="hero-text">
+      <p style="color:var(--accent); font-weight:600; margin-bottom:12px;">👋 Привет, я</p>
+      <h1>Алекс Морозов<br><span class="gradient-text typed" id="typed"></span></h1>
+      <p class="subtitle">Создаю современные веб-решения, которые помогают бизнесу расти. Более 5 лет опыта в разработке.</p>
+      <div>
+        <button class="btn" onclick="goTo('portfolio')">Мои работы</button>
+        <button class="btn btn-outline" onclick="goTo('contact')">Связаться</button>
+      </div>
+    </div>
+    <div class="hero-img">
+      <img src="https://picsum.photos/seed/alex/500/500" alt="Алекс">
+    </div>
+  </div>
+</section>
+
+<!-- 2. ОБО МНЕ -->
+<section class="page" id="about">
+  <div class="container">
+    <h2 class="reveal">Обо <span class="gradient-text">мне</span></h2>
+    <div class="grid grid-2">
+      <div class="card reveal">
+        <img src="https://picsum.photos/seed/about/600/400" alt="about" style="width:100%; border-radius:14px; margin-bottom:18px;">
+        <h3>Моя история</h3>
+        <p>Я начал программировать в 16 лет, и с тех пор веб-разработка стала моей страстью. За годы работы я реализовал более 80 проектов — от небольших лендингов до сложных SaaS-платформ.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Мои навыки</h3>
+        <p>Постоянно учусь новому и слежу за трендами индустрии. Вот мой основной стек:</p>
+        <div class="skills">
+          <span class="skill">HTML5</span>
+          <span class="skill">CSS3 / SCSS</span>
+          <span class="skill">JavaScript</span>
+          <span class="skill">TypeScript</span>
+          <span class="skill">React</span>
+          <span class="skill">Vue.js</span>
+          <span class="skill">Node.js</span>
+          <span class="skill">Python</span>
+          <span class="skill">PostgreSQL</span>
+          <span class="skill">Docker</span>
+          <span class="skill">Figma</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. УСЛУГИ -->
+<section class="page" id="services">
+  <div class="container">
+    <h2 class="reveal">Мои <span class="gradient-text">услуги</span></h2>
+    <p class="subtitle reveal">Комплексный подход к вашим задачам — от идеи до запуска и поддержки.</p>
+    <div class="grid grid-3">
+      <div class="card reveal">
+        <div class="icon">🎨</div>
+        <h3>Веб-дизайн</h3>
+        <p>Создаю уникальные и удобные интерфейсы, которые отражают дух вашего бренда и привлекают клиентов.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">💻</div>
+        <h3>Разработка сайтов</h3>
+        <p>Верстаю быстрые, адаптивные и SEO-оптимизированные сайты с чистым кодом и современными технологиями.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">📱</div>
+        <h3>Мобильные приложения</h3>
+        <p>Кроссплатформенные приложения на React Native, которые работают одинаково хорошо на iOS и Android.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">⚡</div>
+        <h3>Оптимизация</h3>
+        <p>Ускоряю загрузку сайтов, улучшаю Core Web Vitals и повышаю позиции в поисковой выдаче.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">🛒</div>
+        <h3>Интернет-магазины</h3>
+        <p>Разрабатываю e-commerce решения с удобной админкой, оплатой и интеграцией со службами доставки.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">🔧</div>
+        <h3>Поддержка</h3>
+        <p>Техническое сопровождение проектов: обновления, бэкапы, мониторинг и оперативное решение проблем.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. ПОРТФОЛИО -->
+<section class="page" id="portfolio">
+  <div class="container">
+    <h2 class="reveal">Мои <span class="gradient-text">работы</span></h2>
+    <p class="subtitle reveal">Избранные проекты, которыми я горжусь.</p>
+    <div class="grid grid-3">
+      <div class="portfolio-item reveal">
+        <img src="https://picsum.photos/seed/proj1/600/450" alt="Project 1">
+        <div class="portfolio-overlay"><h3>FinTech Dashboard</h3><span>React · TypeScript</span></div>
+      </div>
+      <div class="portfolio-item reveal">
+        <img src="https://picsum.photos/seed/proj2/600/450" alt="Project 2">
+        <div class="portfolio-overlay"><h3>E-commerce Platform</h3><span>Vue.js · Node.js</span></div>
+      </div>
+      <div class="portfolio-item reveal">
+        <img src="https://picsum.photos/seed/proj3/600/450" alt="Project 3">
+        <div class="portfolio-overlay"><h3>Travel App</h3><span>React Native</span></div>
+      </div>
+      <div class="portfolio-item reveal">
+        <img src="https://picsum.photos/seed/proj4/600/450" alt="Project 4">
+        <div class="portfolio-overlay"><h3>Corporate Website</h3><span>Next.js · CMS</span></div>
+      </div>
+      <div class="portfolio-item reveal">
+        <img src="https://picsum.photos/seed/proj5/600/450" alt="Project 5">
+        <div class="portfolio-overlay"><h3>Food Delivery</h3><span>Flutter · Firebase</span></div>
+      </div>
+      <div class="portfolio-item reveal">
+        <img src="https://picsum.photos/seed/proj6/600/450" alt="Project 6">
+        <div class="portfolio-overlay"><h3>AI Chat Bot</h3><span>Python · OpenAI</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. КОНТАКТЫ -->
+<section class="page" id="contact">
+  <div class="container">
+    <h2 class="reveal">Связаться <span class="gradient-text">со мной</span></h2>
+    <p class="subtitle reveal">Готов обсудить ваш проект. Напишите — отвечу в течение дня.</p>
+    <div class="contact-wrap">
+      <div class="contact-info reveal">
+        <div class="info-item">
+          <div class="ic">📧</div>
+          <div><div style="color:var(--muted); font-size:13px;">Email</div><div>alex@morozov.dev</div></div>
+        </div>
+        <div class="info-item">
+          <div class="ic">📞</div>
+          <div><div style="color:var(--muted); font-size:13px;">Телефон</div><div>+7 (999) 123-45-67</div></div>
+        </div>
+        <div class="info-item">
+          <div class="ic">📍</div>
+          <div><div style="color:var(--muted); font-size:13px;">Локация</div><div>Москва, Россия</div></div>
+        </div>
+        <div class="socials">
+          <a href="#" title="Telegram">✈️</a>
+          <a href="#" title="GitHub">🐙</a>
+          <a href="#" title="LinkedIn">💼</a>
+          <a href="#" title="Instagram">📷</a>
+        </div>
+      </div>
+      <form class="reveal" onsubmit="submitForm(event)">
+        <input type="text" placeholder="Ваше имя" required>
+        <input type="email" placeholder="Email" required>
+        <input type="text" placeholder="Тема">
+        <textarea placeholder="Сообщение..." required></textarea>
+        <button type="submit" class="btn">Отправить сообщение</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  // ===== Навигация между страницами =====
+  const buttons = document.querySelectorAll('.nav-links button');
+  const pages = document.querySelectorAll('.page');
+
+  function goTo(id) {
+    pages.forEach(p => p.classList.remove('active'));
+    buttons.forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelector(`[data-page="${id}"]`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('navLinks').classList.remove('open');
+    // Перезапуск анимаций появления
+    setTimeout(triggerReveals, 100);
+  }
+
+  buttons.forEach(btn => btn.addEventListener('click', () => goTo(btn.dataset.page)));
+
+  // ===== Бургер-меню =====
+  document.getElementById('burger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  // ===== Typing-эффект =====
+  const phrases = ['Веб-разработчик', 'UI/UX Дизайнер', 'Фрилансер', 'Создатель идей'];
+  let pIdx = 0, cIdx = 0, deleting = false;
+  const typedEl = document.getElementById('typed');
+  function type() {
+    const current = phrases[pIdx];
+    typedEl.textContent = current.substring(0, cIdx);
+    if (!deleting && cIdx < current.length) { cIdx++; setTimeout(type, 100); }
+    else if (deleting && cIdx > 0) { cIdx--; setTimeout(type, 50); }
+    else {
+      deleting = !deleting;
+      if (!deleting) pIdx = (pIdx + 1) % phrases.length;
+      setTimeout(type, 1200);
+    }
+  }
+  type();
+
+  // ===== Анимация появления при скролле =====
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+
+  function triggerReveals() {
+    document.querySelectorAll('.reveal').forEach(el => {
+      el.classList.remove('visible');
+      observer.observe(el);
+    });
+  }
+  triggerReveals();
+
+  // ===== Форма =====
+  function submitForm(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = '✓ Отправлено!';
+    btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+    e.target.reset();
+    setTimeout(() => {
+      btn.textContent = 'Отправить сообщение';
+      btn.style.background = '';
+    }, 3000);
+  }
+</script>
+</body>
+</html>
